@@ -11,7 +11,9 @@ import { useI18n } from 'vue-i18n'
 import { i18n } from '@/localization'
 import { config } from '@config'
 import { router } from '@/router'
-import { store } from '@/store'
+import { createPinia } from 'pinia'
+
+const store = createPinia()
 
 const app = createApp({
   setup() {

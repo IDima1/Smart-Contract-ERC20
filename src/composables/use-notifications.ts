@@ -16,23 +16,14 @@ export const useNotifications = () => {
   const defaultTitles = {
     [TYPE.SUCCESS]: t('notification.default-title-success'),
     [TYPE.ERROR]: t('notification.default-title-error'),
-    [TYPE.WARNING]: t('notification.default-title-warning'),
-    [TYPE.INFO]: t('notification.default-title-info'),
-    [TYPE.DEFAULT]: t('notification.default-title-default'),
   }
   const defaultMessages = {
-    [TYPE.DEFAULT]: t('notification.default-message-default'),
-    [TYPE.INFO]: t('notification.default-message-info'),
     [TYPE.SUCCESS]: t('notification.default-message-success'),
     [TYPE.ERROR]: t('notification.default-message-error'),
-    [TYPE.WARNING]: t('notification.default-message-warning'),
   }
   const defaultIconNames = {
-    [TYPE.DEFAULT]: ICON_NAMES.exclamationCircle,
-    [TYPE.INFO]: ICON_NAMES.exclamationCircle,
     [TYPE.SUCCESS]: ICON_NAMES.checkCircle,
     [TYPE.ERROR]: ICON_NAMES.xCircle,
-    [TYPE.WARNING]: ICON_NAMES.shieldExclamation,
   }
 
   const showToast = (

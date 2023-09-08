@@ -1,19 +1,11 @@
 <template>
   <div class="app-navbar">
     <app-logo class="app-navbar__logo" />
-
     <app-button
       class="app-navbar__link"
       :scheme="'flat'"
-      :text="$routes.uiKit"
-      :route="{ name: $routes.uiKit }"
-    />
-
-    <app-button
-      class="app-navbar__link"
-      :scheme="'flat'"
-      :text="$routes.complexForm"
-      :route="{ name: $routes.complexForm }"
+      :text="$routes.theMainPage"
+      :route="{ name: $routes.theMainPage }"
     />
   </div>
 </template>

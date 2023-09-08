@@ -1,7 +1,13 @@
 {
   "validations": {
     "field-error_required": "Please fill out this field",
-    "field-error_email": "Field must be a valid email"
+    "field-error_alpha": "Field must be contain only letters",
+    "field-error_numeric": "Field must be contain only numbers"
+  },
+  "placeholders": {
+    "form-inputReplenishment": "Enter the number of tokens to replenish",
+    "form-inputTransferTokens": "Enter the number of tokens you want to send",
+    "form-inputTransferAddress": "Enter the account number you want to send"
   },
   "errors": {
     "default": "Something went wrong"
@@ -24,6 +30,26 @@
     "login-success-msg": "Access granted",
     "submit-btn": "Submit"
   },
+  "contract-form": {
+    "description-header": "Account details",
+    "description-wallet-address": "Your wallet address:",
+    "description-chain-id": "Chain ID:",
+    "description-chain-type": "Chain Type:",
+    "description-contract-description-header": "Contract description",
+    "description-contract-name": "Contract name: ",
+    "description-contract-decimals": "Contract decimals: ",
+    "description-contract-symbol": "Contract symbol:",
+    "replenishment-header": "Replenishment of contract balance",
+    "replenishment-contract-balance": "Contract Balance:",
+    "replenishment-btn": "Replenish balance",
+    "transfer-header": "Transfer tokens",
+    "transfer-quantity": "Enter number of tokens:",
+    "transfer-address": "Recipient's address:",
+    "transfer-btn": "Transfer tokens",
+    "unconnected-header": "You need to connect your Metamask wallet. Click the button below",
+    "unconnected-btn": "Connect wallet"
+
+  },
   "ui-kit-page": {
     "button": "Button",
     "some-placeholder": "placeholder",
@@ -35,4 +61,5 @@
     "loading-error-msg": "Oops, something went wrong",
     "no-data-msg": "Empty data, please add new"
   }
+
 }
