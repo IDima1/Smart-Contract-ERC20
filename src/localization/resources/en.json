@@ -10,7 +10,8 @@
     "form-inputTransferAddress": "Enter the account number you want to send"
   },
   "errors": {
-    "default": "Something went wrong"
+    "err-not-loaded": "Ooops... Something went wrong",
+    "err-loaded": "Loading... Wait"
   },
   "notification": {
     "default-title-success": "Success",

@@ -1,8 +1,8 @@
-import { computed, Ref, ref } from 'vue'
+import { computed, Ref } from 'vue'
 import { Erc20, Erc20__factory } from '@/types/contracts'
 import { BigNumberish, providers } from 'ethers'
 import { RawProvider } from '@distributedlab/w3p'
-import { useProvider } from '@/composables/use-provider'
+import { useProvider } from '../use-provider'
 
 export const useErc20Contract = (
   address: string,
@@ -10,7 +10,7 @@ export const useErc20Contract = (
 ) => {
   const provider = computed(() => useProvider())
 
-  const contractInstance = ref<Erc20 | undefined>(
+  const contractInstance = computed<Erc20 | undefined>(() =>
     rawProvider?.value && address
       ? Erc20__factory.connect(
           address,

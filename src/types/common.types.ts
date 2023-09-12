@@ -1,8 +1,6 @@
 import type { ICON_NAMES } from '@/enums'
 
-export type CommonNotificationTypes =
-  | 'success'
-  | 'error'
+export type CommonNotificationTypes = 'success' | 'error'
 
 export type NotificationObjectPayload = {
   title?: string

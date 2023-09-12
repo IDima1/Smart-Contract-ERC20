@@ -16,8 +16,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/contract-form',
     name: ROUTE_NAMES.theMainPage,
-    component: () => import('@/pages/TheMainPage.vue')
-  }
+    component: () => import('@/pages/TheMainPage.vue'),
+  },
 ]
 
 const router = createRouter({

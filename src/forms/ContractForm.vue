@@ -1,115 +1,156 @@
 <template>
   <form class="contract-form" @submit.prevent="submit">
     <div class="contract-form">
-      <template v-if="provider?.isConnected?.value">
-        <div class="contract-form__description">
-          <div class="contract-form__wallet-info">
-            <h1 class="contract-form__description-header">{{$t('contract-form.description-header')}}</h1>
-            <p class="contract-form__description-text">{{$t('contract-form.description-wallet-address')}} {{ provider?.address }}</p>
-            <p class="contract-form__description-text">{{$t('contract-form.description-chain-id')}} {{ provider?.chainId }}</p>
-            <p class="contract-form__description-text">{{$t('contract-form.description-chain-type')}} {{ provider?.chainType }}</p>
+      <template v-if="store.isLoaded">
+        <template v-if="store.isLoadFailed">
+          <p>{{ $t('errors.err-not-loaded') }}</p>
+        </template>
+        <template v-else-if="store.provider?.isConnected">
+          <div class="contract-form__description">
+            <div class="contract-form__wallet-info">
+              <h1 class="contract-form__description-header">
+                {{ $t('contract-form.description-header') }}
+              </h1>
+              <p class="contract-form__description-text">
+                {{ $t('contract-form.description-wallet-address') }}
+                {{ store.provider?.address }}
+              </p>
+              <p class="contract-form__description-text">
+                {{ $t('contract-form.description-chain-id') }}
+                {{ store.provider?.chainId }}
+              </p>
+              <p class="contract-form__description-text">
+                {{ $t('contract-form.description-chain-type') }}
+                {{ store.provider?.chainType }}
+              </p>
+            </div>
+            <div class="contract-form__contract-info">
+              <h1 class="contract-form__description-header">
+                {{
+                  $t('contract-form.description-contract-description-header')
+                }}
+              </h1>
+              <p class="contract-form__description-text">
+                {{ $t('contract-form.description-contract-name') }}
+                {{ store.contractName }}
+              </p>
+              <p class="contract-form__description-text">
+                {{ $t('contract-form.description-contract-decimals') }}
+                {{ store.contractDecimals }}
+              </p>
+              <p class="contract-form__description-text">
+                {{ $t('contract-form.description-contract-symbol') }}
+                {{ store.contractSymbol }}
+              </p>
+            </div>
           </div>
-          <div class="contract-form__contract-info">
-            <h1 class="contract-form__description-header">{{$t('contract-form.description-contract-description-header')}}</h1>
-            <p class="contract-form__description-text">{{$t('contract-form.description-contract-name')}} {{ contractName }}</p>
-            <p class="contract-form__description-text">{{$t('contract-form.description-contract-decimals')}} {{ contractDecimals }}</p>
-            <p class="contract-form__description-text">{{$t('contract-form.description-contract-symbol')}} {{ contractSymbol }}</p>
-          </div>
-        </div>
-        <div class="contract-form__interaction">
-          <div class="contract-form__interaction-replenishment">
-            <h2 class="contract-form__interaction-header">{{$t('contract-form.replenishment-header')}}</h2>
-            <p class="contract-form__interaction-text">{{$t('contract-form.replenishment-contract-balance')}} {{ getContractBalance }} {{ contractSymbol }}</p>
-            <input-field
-              class="contract-form__interaction-input"
-              v-model="form.inputReplenishment"
-              :label="$t('placeholders.form-inputReplenishment')"
-              :errorMessage="getFieldErrorMessage('inputReplenishment')"
-              :minLength="1"
-            />
-            <app-button
-              class="contract-form__interaction-button"
-              size="large"
-              :text="$t('contract-form.replenishment-btn')"
-              @click="getBalance">
-            </app-button>
-          </div>
+          <div class="contract-form__interaction">
+            <div class="contract-form__interaction-replenishment">
+              <h2 class="contract-form__interaction-header">
+                {{ $t('contract-form.replenishment-header') }}
+              </h2>
+              <p class="contract-form__interaction-text">
+                {{ $t('contract-form.replenishment-contract-balance') }}
+                {{ store.getContractBalance }} {{ store.contractSymbol }}
+              </p>
+              <input-field
+                class="contract-form__interaction-input"
+                v-model="form.inputReplenishment"
+                :label="$t('placeholders.form-inputReplenishment')"
+                :error-message="getFieldErrorMessage('inputReplenishment')"
+                :min-length="LENGTH_VALUE.MIN_LENGTH.tokens"
+                @input="updateInputReplenishment"
+              />
+              <app-button
+                class="contract-form__interaction-button"
+                size="large"
+                :text="$t('contract-form.replenishment-btn')"
+                @click="store.getBalance"
+              >
+              </app-button>
+            </div>
 
-          <div class="contract-form__interaction-transfer">
-            <h2 class="contract-form__interaction-header">{{$t('contract-form.transfer-header')}}</h2>
-            <p class="contract-form__interaction-text">{{$t('contract-form.transfer-quantity')}}</p>
-            <input-field
-              class="contract-form__interaction-input"
-              v-model="form.inputTransferTokens"
-              :label="$t('placeholders.form-inputTransferTokens')"
-              :minLength="1"
-              :errorMessage="getFieldErrorMessage('inputTransferTokens')"
-            />
-            <p class="contract-form__interaction-text">{{$t('contract-form.transfer-address')}}</p>
-            <input-field
-              class="contract-form__interaction-input"
-              v-model="form.inputTransferAddress"
-              :label="$t('placeholders.form-inputTransferAddress')"
-              :minLength="42"
-              :maxLength="42"
-              :errorMessage="getFieldErrorMessage('inputTransferAddress')"
-            />
+            <div class="contract-form__interaction-transfer">
+              <h2 class="contract-form__interaction-header">
+                {{ $t('contract-form.transfer-header') }}
+              </h2>
+              <p class="contract-form__interaction-text">
+                {{ $t('contract-form.transfer-quantity') }}
+              </p>
+              <input-field
+                class="contract-form__interaction-input"
+                v-model="form.inputTransferTokens"
+                :label="$t('placeholders.form-inputTransferTokens')"
+                :min-length="LENGTH_VALUE.MIN_LENGTH.tokens"
+                :error-message="getFieldErrorMessage('inputTransferTokens')"
+                @input="updateTransferTokens"
+              />
+              <p class="contract-form__interaction-text">
+                {{ $t('contract-form.transfer-address') }}
+              </p>
+              <input-field
+                class="contract-form__interaction-input"
+                v-model="form.inputTransferAddress"
+                :label="$t('placeholders.form-inputTransferAddress')"
+                :min-length="LENGTH_VALUE.MIN_LENGTH.address"
+                :max-length="LENGTH_VALUE.MAX_LENGTH.address"
+                :error-message="getFieldErrorMessage('inputTransferAddress')"
+                @input="updateTransferAddress"
+              />
+              <app-button
+                class="contract-form__interaction-button"
+                size="large"
+                :text="$t('contract-form.transfer-btn')"
+                @click="store.transferTokens"
+              >
+              </app-button>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <div class="contract-form__unconnected">
+            <h1 class="contract-form__unconnected-header">
+              {{ $t('contract-form.unconnected-header') }}
+            </h1>
             <app-button
-              class="contract-form__interaction-button"
+              class="contract-form__unconnected-button"
               size="large"
-              :text="$t('contract-form.transfer-btn')"
-              @click="transferTokens">
+              :text="$t('contract-form.unconnected-btn')"
+              modification="border-rounded"
+              @click="store.provider?.connect"
+            >
             </app-button>
           </div>
-        </div>
+        </template>
       </template>
       <template v-else>
-        <div class="contract-form__unconnected">
-          <h1 class="contract-form__unconnected-header">{{ $t('contract-form.unconnected-header') }}</h1>
-          <app-button
-            class="contract-form__unconnected-button"
-            size="large"
-            :text="$t('contract-form.unconnected-btn')"
-            modification="border-rounded"
-            @click="provider?.connect">
-          </app-button>
-        </div>
+        <p>{{ $t('errors.err-loaded') }}</p>
       </template>
     </div>
   </form>
 </template>
 
 <script lang="ts" setup>
-import AppButton from '@/common/AppButton.vue'
-import InputField from '@/fields/InputField.vue'
-import { useProvider, useForm, useFormValidation } from '@/composables'
-import { MetamaskProvider, ProviderDetector } from '@distributedlab/w3p'
-import { computed, ref, onMounted, reactive, Ref, Raw } from 'vue'
-import { bus, BUS_EVENTS, ErrorHandler, numeric, minLength, required, maxLength } from '@/helpers'
-import { useErc20Contract } from '@/composables/contracts'
-import { BigNumber } from 'ethers'
-import { BN } from '@distributedlab/tools'
+import { AppButton } from '@/common'
+import { InputField } from '@/fields'
+import { LENGTH_VALUE } from '@/enums'
+import { useForm, useFormValidation } from '@/composables'
+import { reactive } from 'vue'
+import {
+  bus,
+  BUS_EVENTS,
+  ErrorHandler,
+  numeric,
+  minLength,
+  required,
+  maxLength,
+} from '@/helpers'
 import { useI18n } from 'vue-i18n'
-import { providers } from 'ethers'
-import { Erc20__factory } from '@/types/contracts'
+import { useWeb3ProvidersStore } from '@/store'
 
 const { t } = useI18n()
 
-const provider = useProvider()
-
-const providerDetector = computed(() => new ProviderDetector())
-
-const contractAddress = '0xd987988D019BE0Ffe28f4fc1E04186eD78828e13'
-
-const contractBalance = ref<BigNumber>()
-
-const contractDecimals = ref<Number>()
-
-const contractSymbol = ref<String>()
-
-const contractName = ref<String>()
-
-const { mint, getBalanceOf, getDecimals, getSymbol, getName,  transfer } = useErc20Contract(contractAddress, provider?.rawProvider)
+const store = useWeb3ProvidersStore()
 
 const form = reactive({
   inputReplenishment: '',
@@ -117,156 +158,65 @@ const form = reactive({
   inputTransferAddress: '0x8c39495181151FB3d6Ac8c0215bDb60C076585a9',
 })
 
-const { disableForm, enableForm } = useForm();
-const { isFormValid, getFieldErrorMessage} = useFormValidation(
-  form,
-  {
-    inputReplenishment: { required, numeric, minLength },
-    inputTransferTokens: { required, numeric, minLength },
-    inputTransferAddress: { required, minLength, maxLength },
-  }
-);
+const updateInputReplenishment = () => {
+  store.setInputReplenishment(form.inputReplenishment)
+}
+
+const updateTransferTokens = () => {
+  store.setInputTransferTokens(form.inputTransferTokens)
+}
+
+const updateTransferAddress = () => {
+  store.setInputTransferAddress(form.inputTransferAddress)
+}
+
+const { disableForm, enableForm } = useForm()
+const { isFormValid, getFieldErrorMessage } = useFormValidation(form, {
+  inputReplenishment: { required, numeric, minLength },
+  inputTransferTokens: { required, numeric, minLength },
+  inputTransferAddress: { required, minLength, maxLength },
+})
 
 const submit = async () => {
   if (!isFormValid()) return
-
   disableForm()
-
   try {
     bus.emit(BUS_EVENTS.success, t('login-form.login-success-msg'))
   } catch (error) {
     ErrorHandler.process(error)
   }
-
   enableForm()
 }
-
-const getContractBalance = computed(() => {
-  const balance = contractBalance.value
-
-  if (balance) {
-    const roundedBalance = Math.round(parseFloat(BN.fromBigInt(balance.toString(), 18).toString()))
-    return roundedBalance.toString()
-  } else {
-    return 'Balance is undefined'
-  }
-})
-
-onMounted(async () => {
-  try {
-    await providerDetector.value.init()
-
-    await provider.init(MetamaskProvider, {
-      providerDetector: providerDetector.value,
-      listeners: {
-        onConnect: () => {
-          console.log('Connected to MetaMask');
-        },
-        onDisconnect: () => {
-          console.log('Disconnected from MetaMask');
-        },
-        onAccountChanged: () => {
-          console.log('Account changed');
-        },
-        onChainChanged: () => {
-          console.log('Chain changed');
-        },
-      },
-    })
-
-    if (!provider?.address.value) {
-      return
-    }
-
-    contractBalance.value = await getBalanceOf(provider?.address.value)
-    contractDecimals.value = await getDecimals()
-    contractSymbol.value = await getSymbol()
-    contractName.value = await getName()
-  } catch (error) {
-    ErrorHandler.process(error, 'Problem with initialization')
-  }
-})
-
-const getBalance = async () => {
-  try {
-    if (!provider.address?.value) {
-      throw new TypeError('Provider is not defined')
-    }
-
-    const encodedTx = await mint(
-      provider.address?.value,
-      BN.fromRaw(form.inputReplenishment, 18).value,
-    )
-
-    await provider.signAndSendTx({
-      to: contractAddress,
-      data: encodedTx,
-    })
-
-    contractBalance.value = await getBalanceOf(provider.address?.value)
-    bus.emit(BUS_EVENTS.success, 'The contract account was successfully replenished')
-  } catch (error) {
-    ErrorHandler.process(error, 'Problem with transaction')
-  }
-}
-
-const transferTokens = async () => {
-  try {
-    if (!provider.address?.value) {
-      throw new TypeError('Provider is not defined')
-    }
-
-    const inputAmount = BN.fromRaw(form.inputTransferTokens, 18).value
-
-    const contract = Erc20__factory.connect(
-      contractAddress,
-      new providers.Web3Provider(
-        provider?.rawProvider.value as providers.ExternalProvider,
-      ),
-    )
-
-    const data = contract.interface.encodeFunctionData('transfer', [form.inputTransferAddress, inputAmount])
-
-    return provider.signAndSendTx({
-      to: contractAddress,
-      data
-    })
-
-  } catch (error) {
-    ErrorHandler.process(error, 'Problem with transferring tokens');
-  }
-}
-
+store.init()
 </script>
 
 <style lang="scss" scoped>
-
 .contract-form {
   background-color: var(--background-primary-dark);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(var(--black-rgb), 0.15);
+  padding: toRem(20);
+  border-radius: toRem(10);
+  box-shadow: 0 toRem(2) toRem(5) rgba(var(--black-rgb), 0.15);
 }
 
 .contract-form__description {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
-  gap: 16px;
+  margin-bottom: toRem(20);
+  gap: toRem(16);
 }
 
 .contract-form__description-header,
 .contract-form__interaction-header,
-.contract-form__unconnected-header  {
-  margin-bottom: 10px;
+.contract-form__unconnected-header {
+  margin-bottom: toRem(10);
   color: var(--text-primary-main);
   padding-bottom: toRem(18);
-  border-bottom: 2px solid var(--border-primary-main)
+  border-bottom: toRem(2) solid var(--border-primary-main);
 }
 
 .contract-form__description-text,
-.contract-form__interaction-text{
-  margin-bottom: 2px;
+.contract-form__interaction-text {
+  margin-bottom: toRem(2);
 }
 
 .contract-form__wallet-info,
@@ -274,31 +224,30 @@ const transferTokens = async () => {
   flex: 1;
   padding: toRem(18);
   background-color: var(--background-primary-light);
-  border-radius: 12px;
-  box-shadow: 0 2px 5px rgba(var(--black-rgb), 0.15);
+  border-radius: toRem(12);
+  box-shadow: 0 toRem(2) toRem(5) rgba(var(--black-rgb), 0.15);
 }
 
 .contract-form__interaction {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 16px;
+  flex-direction: column;
+  gap: toRem(16);
 }
 
 .contract-form__interaction-replenishment,
 .contract-form__interaction-transfer {
   background-color: var(--background-primary-light);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(var(--black-rgb), 0.15);
+  padding: toRem(20);
+  border-radius: toRem(10);
+  box-shadow: 0 toRem(2) toRem(5) rgba(var(--black-rgb), 0.15);
   width: 100%;
 }
 
 .contract-form__interaction-input {
   width: 100%;
-  padding: 10px 10px 10px 0px;
-  margin-bottom: 10px;
-  border-radius: 5px;
+  padding: toRem(10) toRem(10) toRem(10) toRem(0);
+  margin-bottom: toRem(10);
+  border-radius: toRem(5);
 }
 
 .contract-form__interaction-button,
@@ -306,8 +255,8 @@ const transferTokens = async () => {
   background-color: var(--primary-main);
   color: var(--text-primary-invert-light);
   border: none;
-  border-radius: 12px;
-  padding: 10px 20px;
+  border-radius: toRem(12);
+  padding: toRem(10) toRem(20);
   cursor: pointer;
   transition: var(--primary-main) 0.3s ease;
 }
