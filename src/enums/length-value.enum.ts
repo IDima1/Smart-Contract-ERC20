@@ -1,4 +1,6 @@
-export const LENGTH_VALUE = {
-  MAX_LENGTH: { address: 42, tokens: 100000000 },
-  MIN_LENGTH: { address: 42, tokens: 1 },
+export enum LENGTH_VALUE {
+  MAX_LENGTH_ADDRESS = 42,
+  MIN_LENGTH_ADDRESS = 42,
+  MAX_LENGTH_TOKENS = 10000000,
+  MIN_LENGTH_TOKENS = 1,
 }

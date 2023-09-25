@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     redirect: { name: ROUTE_NAMES.theMainPage },
   },
   {
-    path: '/contract-form',
+    path: '/',
     name: ROUTE_NAMES.theMainPage,
     component: () => import('@/pages/TheMainPage.vue'),
   },

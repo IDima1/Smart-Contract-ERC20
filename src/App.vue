@@ -12,21 +12,25 @@
 <script lang="ts" setup>
 import { AppNavbar } from '@/common'
 
-import { ref } from 'vue'
+import { ref} from 'vue'
 import { useNotifications } from '@/composables'
 import { config } from '@config'
 import { bus, BUS_EVENTS, ErrorHandler } from '@/helpers'
 import { NotificationPayload } from '@/types'
+import { useProviderInitStore } from '@/store'
 
 const isAppInitialized = ref(false)
 
 const { showToast } = useNotifications()
+
+const storeProvider = useProviderInitStore()
 
 const init = async () => {
   try {
     document.title = config.APP_NAME
 
     initNotifications()
+    await storeProvider.initProvider()
   } catch (error) {
     ErrorHandler.process(error)
   }
@@ -37,14 +41,8 @@ const initNotifications = () => {
   bus.on(BUS_EVENTS.success, payload =>
     showToast('success', payload as NotificationPayload),
   )
-  bus.on(BUS_EVENTS.warning, payload =>
-    showToast('warning', payload as NotificationPayload),
-  )
   bus.on(BUS_EVENTS.error, payload =>
     showToast('error', payload as NotificationPayload),
-  )
-  bus.on(BUS_EVENTS.info, payload =>
-    showToast('info', payload as NotificationPayload),
   )
 }
 

@@ -1,25 +1,21 @@
-import { computed, Ref } from 'vue'
+import { computed } from 'vue'
 import { Erc20, Erc20__factory } from '@/types/contracts'
 import { BigNumberish, providers } from 'ethers'
-import { RawProvider } from '@distributedlab/w3p'
-import { useProvider } from '../use-provider'
+import { useProviderInitStore } from '@/store'
 
-export const useErc20Contract = (
-  address: string,
-  rawProvider?: Ref<RawProvider | undefined>,
-) => {
-  const provider = computed(() => useProvider())
+export const useErc20Contract = (address: string) => {
+  const storeProvider = useProviderInitStore()
 
-  const contractInstance = computed<Erc20 | undefined>(() =>
-    rawProvider?.value && address
-      ? Erc20__factory.connect(
-          address,
-          new providers.Web3Provider(
-            rawProvider.value as providers.ExternalProvider,
-          ),
-        )
-      : undefined,
-  )
+  const provider = computed(() => storeProvider.provider)
+
+  const contractInstance = computed<Erc20 | undefined>(() => {
+    if (!provider?.value?.rawProvider && address) {
+      return undefined
+    } else {
+      const web3Provider = new providers.Web3Provider(provider.value.rawProvider as providers.ExternalProvider);
+      return Erc20__factory.connect(address, web3Provider);
+    }
+  });
 
   const contractInterface = Erc20__factory.createInterface()
 
@@ -66,7 +62,15 @@ export const useErc20Contract = (
   }
 
   const mint = async (to: string, amount: BigNumberish) => {
-    return contractInterface.encodeFunctionData('mint', [to, amount])
+    const data = contractInterface.encodeFunctionData('mint', [
+      to,
+      amount
+    ])
+
+    return provider.value.signAndSendTx({
+      to: address,
+      data,
+    })
   }
 
   const renounceOwnership = async () => {
@@ -78,9 +82,9 @@ export const useErc20Contract = (
     })
   }
 
-  const transfer = async (address: string, amount: BigNumberish) => {
+  const transfer = async (spender: string, amount: BigNumberish) => {
     const data = contractInterface.encodeFunctionData('transfer', [
-      address,
+      spender,
       amount,
     ])
 

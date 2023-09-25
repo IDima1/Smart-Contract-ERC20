@@ -1,1 +1,1 @@
-export * from './contract-erc20'
+export * from './use-erc20-contract'
