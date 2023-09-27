@@ -1,5 +1,4 @@
-export enum ROUTE_NAMES {
+export enum RouteNames {
   app = 'app',
-  uiKit = 'ui-kit',
-  complexForm = 'complex-form',
+  theMainPage = 'TheMainPage',
 }

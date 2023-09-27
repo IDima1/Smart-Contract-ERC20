@@ -1,5 +1,2 @@
-import { createPinia } from 'pinia'
-
-const store = createPinia()
-
-export { store }
+export * from './web3-provider'
+export * from './init-pinia'

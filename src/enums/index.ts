@@ -1,2 +1,3 @@
-export { ROUTE_NAMES } from './route-names.enum'
-export { ICON_NAMES } from './icon-names.enum'
+export { RouteNames } from './route-names.enum'
+export { IconNames } from './icon-names.enum'
+export { LengthValue } from './length-value.enum'

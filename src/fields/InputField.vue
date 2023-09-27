@@ -42,13 +42,13 @@
         >
           <icon
             class="input-field__password-icon"
-            :name="isPasswordShown ? ICON_NAMES.eye : ICON_NAMES.eyeOff"
+            :name="isPasswordShown ? IconNames.eye : IconNames.eyeOff"
           />
         </button>
         <icon
           v-else-if="props.errorMessage"
           class="input-field__error-icon"
-          :name="ICON_NAMES.exclamationCircle"
+          :name="IconNames.exclamationCircle"
         />
       </div>
     </div>
@@ -72,7 +72,7 @@ import { BN, DECIMALS } from '@distributedlab/tools'
 import { computed, onMounted, ref, useAttrs, useSlots } from 'vue'
 
 import { Icon } from '@/common'
-import { ICON_NAMES } from '@/enums'
+import { IconNames } from '@/enums'
 import { v4 as uuidv4 } from 'uuid'
 
 const props = withDefaults(
