@@ -2,7 +2,8 @@
   "validations": {
     "field-error_required": "Please fill out this field",
     "field-error_alpha": "Field must be contain only letters",
-    "field-error_numeric": "Field must be contain only numbers"
+    "field-error_numeric": "Field must be contain only numbers",
+    "field-error_correct-address": "Invalid address format"
   },
   "placeholders": {
     "tokens-to-replenish-label": "Enter the number of tokens to replenish",
@@ -23,7 +24,9 @@
     "default-message-error": "Something went wrong",
     "default-message-warning": "Something you are doing is not recommended",
     "default-message-info": "Something is happening. Just want you to know that",
-    "default-message-default": "Just a message"
+    "default-message-default": "Just a message",
+    "contract-message-replenish": "The contract account was successfully replenished",
+    "contract-message-tranfer": "The tokens was succsesfully transfered"
   },
   "contract": {
     "unconnected-title": "You need to connect your Metamask wallet. Click the button below",

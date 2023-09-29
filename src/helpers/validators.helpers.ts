@@ -10,6 +10,7 @@ import { Ref } from 'vue'
 import { createI18nMessage, MessageProps } from '@vuelidate/validators'
 import get from 'lodash/get'
 import { i18n } from '@/localization'
+import { ethers } from 'ethers'
 
 const { t } = i18n.global || i18n
 
@@ -30,4 +31,15 @@ export const maxLength = (length: number): ValidationRule =>
 
 export const sameAs = (field: Ref): ValidationRule => {
   return <ValidationRule>withI18nMessage(_sameAs(field, get(field, '_key')))
+}
+
+export const correctAddress = (value: string) => {
+  if (!ethers.utils.isAddress(value)) {
+    return {
+      $message: {
+        key: 'validations.field-error_correct-address',
+      },
+    }
+  }
+  return true
 }

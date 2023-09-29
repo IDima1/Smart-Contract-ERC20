@@ -1,11 +1,11 @@
 <template>
   <div class="the-main-page">
-    <contract />
+    <contract-form />
   </div>
 </template>
 
 <script lang="ts" setup>
-import Contract from '@/forms/Contract.vue'
+import ContractForm from '@/forms/ContractForm.vue'
 </script>
 
 <style lang="scss" scoped>

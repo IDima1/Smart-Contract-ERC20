@@ -9,14 +9,12 @@ export const useErc20Contract = (address: string) => {
   const provider = computed(() => storeProvider.provider)
 
   const contractInstance = computed<Erc20 | undefined>(() => {
-    if (!provider?.value?.rawProvider && address) {
-      return undefined
-    } else {
-      const web3Provider = new providers.Web3Provider(
-        provider.value.rawProvider as providers.ExternalProvider,
-      )
-      return Erc20__factory.connect(address, web3Provider)
-    }
+    if (!provider?.value?.rawProvider && address) return undefined
+
+    const web3Provider = new providers.Web3Provider(
+      provider.value.rawProvider as providers.ExternalProvider,
+    )
+    return Erc20__factory.connect(address, web3Provider)
   })
 
   const contractInterface = Erc20__factory.createInterface()
