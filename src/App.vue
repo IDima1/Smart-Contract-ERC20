@@ -17,16 +17,20 @@ import { useNotifications } from '@/composables'
 import { config } from '@config'
 import { bus, BUS_EVENTS, ErrorHandler } from '@/helpers'
 import { NotificationPayload } from '@/types'
+import { useProviderInitStore } from '@/store'
 
 const isAppInitialized = ref(false)
 
 const { showToast } = useNotifications()
+
+const storeProvider = useProviderInitStore()
 
 const init = async () => {
   try {
     document.title = config.APP_NAME
 
     initNotifications()
+    await storeProvider.initProvider()
   } catch (error) {
     ErrorHandler.process(error)
   }

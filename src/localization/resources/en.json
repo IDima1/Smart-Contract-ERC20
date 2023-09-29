@@ -1,10 +1,18 @@
 {
   "validations": {
     "field-error_required": "Please fill out this field",
-    "field-error_email": "Field must be a valid email"
+    "field-error_alpha": "Field must be contain only letters",
+    "field-error_numeric": "Field must be contain only numbers",
+    "field-error_correct-address": "Invalid address format"
+  },
+  "placeholders": {
+    "tokens-to-replenish-label": "Enter the number of tokens to replenish",
+    "tokens-to-transfer-label": "Enter the number of tokens you want to send",
+    "address-to-tranfer-label": "Enter the account number you want to send"
   },
   "errors": {
-    "default": "Something went wrong"
+    "loaded-failed-msg": "Ooops... Something went wrong",
+    "loading-err-msg": "Loading... Wait"
   },
   "notification": {
     "default-title-success": "Success",
@@ -16,23 +24,31 @@
     "default-message-error": "Something went wrong",
     "default-message-warning": "Something you are doing is not recommended",
     "default-message-info": "Something is happening. Just want you to know that",
-    "default-message-default": "Just a message"
+    "default-message-default": "Just a message",
+    "contract-message-replenish": "The contract account was successfully replenished",
+    "contract-message-tranfer": "The tokens was succsesfully transfered"
   },
-  "login-form": {
-    "login-lbl": "Login",
-    "password-lbl": "Password",
-    "login-success-msg": "Access granted",
-    "submit-btn": "Submit"
+  "contract": {
+    "unconnected-title": "You need to connect your Metamask wallet. Click the button below",
+    "unconnected-btn": "Connect wallet"
   },
-  "ui-kit-page": {
-    "button": "Button",
-    "some-placeholder": "placeholder",
-    "some-label": "label",
-    "some-error-message": "error-message",
-    "modal-btn": "Open modal",
-    "accordion-btn": "Toggle Accordion",
-    "collapse-text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    "loading-error-msg": "Oops, something went wrong",
-    "no-data-msg": "Empty data, please add new"
+  "contract-details": {
+    "account-title": "Account details",
+    "contract-title": "Contract description",
+    "address-text": "Your wallet address:",
+    "chain-id-text": "Chain ID:",
+    "chain-type-text": "Chain Type:",
+    "contract-name-text": "Contract name:",
+    "contract-decimals-text": "Contract decimals:",
+    "contract-symbol-text": "Contract symbol:",
+    "contract-balance-text": "Contract balance:"
+  },
+  "contract-interaction": {
+    "replenishment-header": "Replenishment of contract balance",
+    "transfer-header": "Transfer tokens",
+    "replenish-balance-btn": "Replenish balance",
+    "amount-of-tokens-text": "Enter number of tokens",
+    "recipient-address-text": "Recipient's address",
+    "transfer-tokens-btn": "Transfer tokens"
   }
 }
